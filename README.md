@@ -18,7 +18,7 @@ library(devtools)
 install_github('GRaF', 'goldingn')
 
 # and load it
-library(graf)
+library(GRaF)
 ```
 
 ### reporting bugs
