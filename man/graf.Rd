@@ -10,7 +10,7 @@ Sets up and fits a GRaF model, returning an object of class \code{graf} for whic
 \usage{
 graf(y, x, error = NULL, weights = NULL, prior = NULL, l = NULL, opt.l = FALSE,
 		theta.prior.pars = c(log(10), 1), hessian = FALSE, opt.control = list(),
-		verbose = FALSE)
+		verbose = FALSE, method = c('Laplace', 'EP'))
 }
 \details{
 In addition to the dataframe of covariates \code{x} a matrix of corresponding standard deviations, describing the measurement error, may be specified via the \code{error} argument.\cr\cr
@@ -55,6 +55,9 @@ For large models, adjusting control parameters such as the convergence tolerance
   \item{verbose}{
 Logical, whether to display (limited) progress information for the fitting algorithms.
 }
+  \item{method}{
+The approximation method used to fit model. Currently only \code{'Laplace'} (Laplace approximation - the default) and \code{'EP'} (the expectation-propagation algorithm) are available. Whilst the EP algorithm is known to provide a more accurate approximation than Laplace under certain circumstances (see e.g. section 3.7.2 of Rasmussen & Williams (2006)), it has the disadvantages of much greater computational cost and no method for incorporating regression weights (at least in this implementation). In practice, models fitted using the two methods are likely to be very similar. The two approximations are described in detail by Rasmussen & Williams (2006).
+}
 }
 
 \value{
@@ -62,7 +65,9 @@ A \code{graf} object which can be viewed and manipulated using \code{print}, \co
 }
 \references{
 Golding & Purse (2013) GRaF: Fast and Flexible Bayesian Species Distribution Modelling Using Gaussian
-Random Fields. Manuscript in preparation.
+Random Fields. Manuscript in preparation, preprint available here: \url{http://dx.doi.org/10.6084/m9.figshare.767289}
+
+Rasmussen & Williams(2006) Gaussian Processes for Machine Learning. \url{http://www.gaussianprocess.org/gpml/chapters/}
 }
 
 \seealso{
