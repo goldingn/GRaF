@@ -35,7 +35,11 @@ graf.fit.ep <-
     z <- mu / sqrt(1 + diag(K))
     mnll <- -sum(pnorm(y * z), log.p = TRUE)
     
+<<<<<<< HEAD
     # set old mnll to Inf & start iteration counter
+=======
+    # set old mnlll to Inf & start iteration counter
+>>>>>>> 4e7ca641eef9ea4d6c34daaa257ba22c30678264
     mnll_old <- Inf
     it <- 1
     converged <- FALSE
