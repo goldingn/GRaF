@@ -18,7 +18,7 @@ update.ep <-
     nu_ni <- mu[i] / sig2_i + mn[i] * tau_ni - tnu[i]
     
     # compute marginal moments \hat{\mu}_i and \hat{\sigma}_i^2
-    # calulate required derivatives of individual log partition function
+    # calculate required derivatives of individual log partition function
     z <- nu_ni / tau_ni / (sqrt(1 + 1 / tau_ni))
     yz <- y[i] * z
     lZ <- pnorm(yz, log.p = TRUE)
