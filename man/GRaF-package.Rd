@@ -13,8 +13,8 @@ GRaF fits Gaussian random field species distribution models using Laplace approx
 \tabular{ll}{
 Package: \tab GRaF\cr
 Type: \tab Package\cr
-Version: \tab 0.1-11\cr
-Date: \tab 2013-06-12\cr
+Version: \tab 0.1-12\cr
+Date: \tab 2014-01-03\cr
 License: \tab GPL (>= 2)\cr
 }
 GRaF provides functions to fit, visualise, and predict from Gaussian random field models for binary data, with an emphasis on species distribution models. The principle function is \code{\link{graf}} which returns a \code{graf} object, which can be manipulated using \code{plot}, \code{print} and \code{predict} methods among others.
