@@ -8,4 +8,4 @@ Author: Nick Golding
 Maintainer: Nick Golding <nick.golding@linacre.ox.ac.uk>
 Description: Functions to fit, visualise and compare Gaussian random field species distribution models.
 License: GPL (>= 2)
-Depends: dismo
+Imports: dismo
