@@ -72,19 +72,13 @@ predict.graf.raster <-
           
         }
         
-        # make factor
-        
+        # predict to this batch of pixels
         p <- predict.graf(m,
                           newdata = newdata,
                           type = type,
                           CI = CI,
                           maxn = maxn,
                           ...)
-        
-        
-        #         p <- .jcall(mxe, "[D", "predict", lambdas, 
-        #                     .jarray(colnames(rowvals)), .jarray(rowvals, 
-        #                                                         dispatch = TRUE), args)
         
         naind <- as.vector(attr(rowvals, "na.action"))
         

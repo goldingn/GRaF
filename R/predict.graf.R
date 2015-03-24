@@ -2,15 +2,17 @@ predict.graf <-
 function(object, newdata = NULL, type = c('response', 'latent'),
                          CI = 0.95, maxn = NULL, ...) {
   
-  if (class(newdata) == 'raster') {
+  if (class(newdata) %in% c('Raster', 'RasterBrick', 'RasterStack')) {
   
-    # predict ot a raster
+    # predict to a raster
     ans <- predict.graf.raster(object = object,
-                               newdata = newdata,
+                               x = newdata,
                                type = type,
                                CI = CI,
                                maxn = maxn,
                                ...)
+   
+    return (ans)
     
   }
   
