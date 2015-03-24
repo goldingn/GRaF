@@ -1,6 +1,19 @@
 predict.graf <-
 function(object, newdata = NULL, type = c('response', 'latent'),
                          CI = 0.95, maxn = NULL, ...) {
+  
+  if (class(newdata) == 'raster') {
+  
+    # predict ot a raster
+    ans <- predict.graf.raster(object = object,
+                               newdata = newdata,
+                               type = type,
+                               CI = CI,
+                               maxn = maxn,
+                               ...)
+    
+  }
+  
   type = match.arg(type)
   if (is.null(maxn)) maxn <- round(nrow(object$x) / 10)
   # set up data
