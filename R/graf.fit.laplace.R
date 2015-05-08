@@ -11,6 +11,7 @@ graf.fit.laplace <-
     
     # an identity matrix for the calculations
     eye <- diag(n) 
+    
     # initialise
     a <- rep(0, n)
     f <- mn
@@ -41,12 +42,46 @@ graf.fit.laplace <-
       
     }
     
+    # recompute key components
+    cf <- f - mn
+    W <- -(wt * d2(f, y))
+    rW <- sqrt(W)
+    mat1 <- rW %*% t(rW) * K + eye
+    L <- tryCatch(chol(mat1),
+                  error = function(x) return(NULL))
+    
     # return marginal negative log-likelihood
-    lp <- sum(wt * d0(f, y))
-    mnll <- (a %*% cf)[1, 1] / 2 - lp + sum(log(diag(L)))
+    mnll <- (a %*% cf)[1, 1] / 2 + sum(log(diag(L)) - (wt * d0(f, y)))
+    
+    # get partial gradients of the objective wrt l
+    
+    # gradient components
+    W12 <- matrix(rep(rW, n), n)
+    R <- W12 * backsolve(L, forwardsolve(t(L), diag(rW)))
+    C <- forwardsolve(t(L), (W12 * K))
+    
+    # partial gradients of the kernel
+    dK <- cov.SE.d1(x, e, l)
+    
+    # rate of change of likelihood w.r.t. the mode
+    s2 <- (diag(K) - colSums(C ^ 2)) / 2 * d3(f, y)
+    
+    # vector to store gradients
+    l_grads <- rep(NA, length(l))
+    
+    for (i in 1:length(l)) {
+      
+      grad <- sum(R * dK[[i]]) / 2
+      grad <- grad - (t(a) %*% dK[[i]] %*% a) / 2
+      b <- dK[[i]]%*% d1(f, y)
+      grad <- grad - t(s2) %*% (b - K %*% (R %*% b))
+      l_grads[i] <- grad
+      
+    }
     
     if(verbose ) cat(paste("  ", it, "Laplace iterations\n"))
     if(it == itmax) print("timed out, don't trust the inference!")
     return(list(y = y, x = x, MAP = f, ls = l, a = a, W = W, L = L, K = K,
-                e = e, obsx = x, obsy = y, mnll = mnll, wt = wt))
+                e = e, obsx = x, obsy = y, mnll = mnll, wt = wt,
+                l_grads = l_grads))
   }

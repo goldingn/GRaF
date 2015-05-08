@@ -183,5 +183,6 @@ graf.fit.ep <-
                  obsx = x,
                  obsy = oldy,
                  mnll = mnll,
-                 wt = wt))
+                 wt = wt,
+                 l_grads = NULL))
 }
