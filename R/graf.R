@@ -5,177 +5,26 @@ graf <-
     
     method <- match.arg(method)
     
+    # optionally optimise graf (by recursively calling this function)
     if (opt.l) {
-      # call graf recursively to optimise the lengthscale parameters
-      # if l is specified, use this as the starting point
       
-      nlposterior <- function(theta, prior.pars) {
-        
-        it <<- it + 1
-        
-        if (verbose) cat(paste('\nlengthscale optimisation iteration', it, '\n'))
-        
-        # define calculate the negative log posterior
-        # if (any(theta > theta.limit)) return(.Machine$double.xmax)
-        
-        # convert from theta into l
-        l <- rep(NA, k)
-        if (length(notfacs) > 0) l[notfacs] <- exp(theta)
-        if (length(facs) > 0) l[facs] <- 0.01
-        if (any(is.na(l))) stop('missing lengthscales')
-        
-        m <- graf(y, x, error, weights, prior = prior, l = l,
-                  verbose = verbose, method = method)
-        
-        # marginal log likelihood
-        llik <- -m$mnll
-        
-        # log prior
-        lpri <- theta.prior(theta, prior.pars)$density
-        
-        # log prosterior
-        lpost <- llik + lpri
-        
-        if (verbose) cat(paste('\nlog posterior:', round(lpost, 3), '\n'))
-        
-        # make sure it's finite
-        lpost <- ifelse(is.finite(lpost), lpost, -.Machine$double.xmax)
-        
-        # turn into objective
-        objective <- -lpost
-        
-        if (method == 'Laplace') {
-          # partial gradients of the marginal log likelihood w.r.t. theta
-          # dZ/dtheta = dZ/dl * dl/dtheta
-          # d/dx exp(x) = exp(x)
-          
-          dZdl <- m$l_grads
-          
-          # remove factors
-          if (length(m$facs) > 0) {
-            dZdl <- dZdl[-m$facs]
-          }
-          
-          gllik <- dZdl * exp(theta)
-          
-          # partial gradients of the log prior w.r.t. theta
-          glpri <- theta.prior(theta, prior.pars)$gradient
-          
-          # partial gradients of the log posterior
-          glpost <- gllik + glpri
-          
-          if (verbose) cat(paste('\npartial gradients:',
-                                 paste(round(glpost, 4), collapse = ', '),
-                                 '\n'))
-          
-          # get gradient of negative log posterior
-          # dmZ/dtheta =  dmZ/dZ * dZ/dtheta
-          # dmZ/dZ = d/dZ -Z = -1
-          # dmZ/dtheta =  -1 * dZ/dtheta
-          gradient <- -1 * glpost
-          
-          attributes(objective) <- list(gradient = gradient)
-          
-        }
-        
-        return(objective)
-        
-      }
+      # get all visible object as a list
+      args <- capture.all()
       
-      k <- ncol(x)
+      # get the expected objects
+      expected_args <- names(formals(graf))
       
-      # set up initial lengthscales
-      if (is.null(l)) {
-        l <- rep(1, k)
-      } else if (length(l) != k) {
-        stop(paste('l must have', k, 'elements'))
-      }
+      # remove any unexpected arguments
+      args <- args[names(args) %in% expected_args]
       
-      # find factors and drop them from theta
-      notfacs <- 1:k
-      facs <- which(unlist(lapply(x, is.factor)))
-      if (length(facs) > 0) {
-        notfacs <- notfacs[-facs]
-        l[facs] <- 0.01
-      }
+      # pass this to optimiser
+      fit <- optimise.graf(args)
       
-      # log them
-      theta <- log(l[notfacs])
+      # skip out of this function and return
+      return (fit)
       
-      # if we want the hessian (for later MC integration) turn off the limit to theta 
-      #if (hessian) theta.limit = Inf
-      
-      # use get hyperprior density and gradient
-      theta.prior <- function(theta, pars) {
-        
-        density <- sum(dnorm(theta, pars[1], pars[2], log = TRUE))
-        
-        gradient <- (pars[1] - theta) / pars[2] ^ 2
-        
-        return(list(density = density,
-                    gradient = gradient))
-        
-      }
-      
-      it <- 0
-      if (length(notfacs) == 1)  {
-        meth <- 'Brent'
-        low <- -100
-        up <- 100
-      } else {
-        if (method == 'Laplace') {
-          meth <- 'nlm'
-        } else {
-          meth <- 'BFGS'
-        }
-        low <- -Inf 
-        up <- Inf
-      }
-      
-      # run numerical optimisation on the hyperparameters
-      # if (is.null(opt.tol)) opt.tol <- sqrt(.Machine$double.eps)
-      
-      if (meth == 'nlm') {
-        
-        opt <- nlm(nlposterior,
-                   p = theta,
-                   prior.pars = theta.prior.pars,
-                   hessian = hessian)
-        
-        # get the resultant lengthscales
-        l[notfacs] <- exp(opt$estimate)
-        
-      } else {
-        
-        opt <- optim(theta,
-                     nlposterior,
-                     gr = NULL,
-                     prior.pars = theta.prior.pars,
-                     hessian = hessian,
-                     lower = low,
-                     upper = up,
-                     method = meth,
-                     control = opt.control)
-        
-        # get the resultant lengthscales
-        l[notfacs] <- exp(opt$par)
-        
-        print(opt)
-      }
-
-      # replace hessian with the hessian matrix or NULL
-      if (hessian) {
-        hessian <- opt$hessian
-      } else {
-        hessian <- NULL
-      }
-      
-      # fit the final model and return
-      return (graf(y, x, error, weights, prior, l = l, verbose = verbose, hessian = hessian, method = method))
-      
-    } # end opt.l if statement
+    }
     
-    method = match.arg(method)
     
     if (!is.data.frame(x)) stop ("x must be a dataframe")
     
@@ -226,6 +75,7 @@ graf <-
       l <- rep(0.01, k)
       l[notfacs] <- apply(x[y == 1, notfacs, drop = FALSE], 2, sd) * 8
     }
+    
     # calculate mean (on unscaled data and probability scale)
     mn <- mnfun(obsx)
     
@@ -247,3 +97,14 @@ graf <-
     class(fit) <- "graf"
     fit
   }
+
+capture.all <- function() {
+  # capture all visible objects in the parent environment and pass to a list
+  env <- parent.frame()
+  object_names <- objects(env)
+  objects <- lapply(object_names,
+                    get,
+                    envir = env)
+  names(objects) <- object_names
+  return (objects)
+}
