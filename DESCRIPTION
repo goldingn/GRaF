@@ -7,4 +7,4 @@ Author: Nick Golding
 Maintainer: Nick Golding <nick.golding@linacre.ox.ac.uk>
 Description: Functions to fit, visualise and compare Gaussian process species distribution models.
 License: GPL (>= 2)
-Depends: dismo
+Depends: dismo, memoise

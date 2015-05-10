@@ -40,10 +40,10 @@ An optional vector of lengthscales for each dimension of the Gaussian field. The
 If \code{NULL} lengthscales are approximated as 8 times the ratio between the standard deviation of environmental variables at presence sites and the standard deviation of environmental variables at all sites. If \code{opt.l = TRUE} and \code{l} is specified it gives the starting position for the opimisation algorithm. Lengthscales specified for factors will be ignored.
 }
   \item{opt.l}{
-Whether to optimise the lengthscale parameters with respect to the model marginal likelihood using \code{\link{optim}} (with method \code{BFGS}) and return a model fitted with the maximum \emph{a posteriori} estimate of the lengthscales. With a large number of data points this can be quite time consuming.
+Whether to optimise the lengthscale parameters with respect to the model marginal likelihood using \code{\link{optim}} and return a model fitted with the maximum \emph{a posteriori} estimate of the lengthscales. With a large number of data points this can be quite time consuming. The optimisation routine currently uses the optimisation method \code{'L-BFGS-B'} with an analytical gradient when \code{method = 'Laplace'} and the optimisation method \code{'BFGS'} with numerical approximation to the gradient when \code{method = 'EP'}, so optimising in the latter case will be a lot slower.
 }
   \item{theta.prior.pars}{
-If \code{opt.l = TRUE}, allows the user to specify the mean and standard deviation of the normal hyperprior over the log-lengthscale hyperparameter theta. By default the mean is set at log(10) and the standard deviation at 1. 
+If \code{opt.l = TRUE}, allows the user to specify the mean and standard deviation of the normal hyperprior over the log-lengthscale hyperparameter theta. By default the mean is set at log(10) and the standard deviation at 1. If a prior over the lengthscales is not required, doing \code{theta.prior.pars = c(NA, NA)} will do maximum-likelihood inference over the lengthscale instead.
 }
   \item{hessian}{
 If \code{opt.l = TRUE}, whether to calculate the hessian matrix whilst optimising lengthscales. Calculating the hessian is more time consuming and is not recommended for general use, but advanced users could use it to approximate the full posterior density of the lengthscale hyperparameters.

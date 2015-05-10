@@ -75,7 +75,7 @@ graf.fit.laplace <-
       grad <- grad - (t(a) %*% dK[[i]] %*% a) / 2
       b <- dK[[i]]%*% d1(f, y)
       grad <- grad - t(s2) %*% (b - K %*% (R %*% b))
-      l_grads[i] <- grad
+      l_grads[i] <- -grad
       
     }
     

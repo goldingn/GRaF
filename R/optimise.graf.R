@@ -2,6 +2,11 @@
 # density and gradient of the prior over the log hyperparameters
 theta.prior <- function(theta, pars) {
   
+  if (any(is.na(pars))) {
+    return(list(density = 0,
+                gradient = rep(0, length(theta))))
+  }
+  
   density <- sum(dnorm(theta, pars[1], pars[2], log = TRUE))
   
   gradient <- (pars[1] - theta) / pars[2] ^ 2
@@ -85,7 +90,8 @@ optimise.graf <- function(args) {
   args[['opt.l']] <- FALSE
   
   # memoise graf
-  mgraf <- memoise(graf)
+#   mgraf <- memoise(graf)
+  mgraf <- graf
   
   # set up initial lengthscales
   k <- ncol(args$x)
@@ -107,22 +113,17 @@ optimise.graf <- function(args) {
   # logical vector of factors
   isfac <- 1:k %in% facs
   
-  if (length(notfacs) == 1)  {
-    meth <- 'Brent'
-    grad <- NULL
-    low <- -100
-    up <- 100
+  # optimisation arguments
+  if (args$method == 'Laplace') {
+    meth <- 'L-BFGS-B'
+    grad <- gradient
   } else {
-    if (args$method == 'Laplace') {
-      meth <- 'CG'
-      grad <- gradient
-    } else {
-      meth <- 'BFGS'
-      grad <- NULL
-    }
-    low <- -Inf 
-    up <- Inf
+    meth <- 'BFGS'
+    grad <- NULL
   }
+
+  low <- -Inf 
+  up <- Inf
   
   opt <- optim(theta,
                fn = objective,
