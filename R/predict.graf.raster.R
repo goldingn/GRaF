@@ -12,9 +12,17 @@ predict.graf.raster <-
       
     } else {
       
-      # if CIs are required
-      out <- brick(x,
-                   nl = 3)
+      if (CI == 'std') {
+        # if the SD is needed (latent case)
+        out <- brick(x,
+                     nl = 2)
+        
+      } else {
+        # if proper CIs are required
+        out <- brick(x,
+                     nl = 3)
+        
+      }
       
     }
     
