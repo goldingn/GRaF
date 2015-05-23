@@ -96,7 +96,8 @@ predict.graf.raster <-
       
       if (inMemory) {
         
-        res <- array(res, dim = c(tr$nrows[i], ncol(out), nlayers(out)))
+        res <- array(res, dim = c(ncol(out), tr$nrows[i], nlayers(out)))
+        res <- aperm(res, c(2, 1, 3))
         rows <- tr$row[i]:(tr$row[i] + tr$nrows[i] - 1)
         v[rows, , ] <- res
         
@@ -113,6 +114,9 @@ predict.graf.raster <-
     pbClose(pb)
     
     if (inMemory) {
+      
+      # permute v so that it gets vectorized in the right direction
+      v <- aperm(v, c(2, 1, 3))
       
       for (i in 1:nlayers(out)) {
       
