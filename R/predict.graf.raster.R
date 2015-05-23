@@ -117,7 +117,7 @@ predict.graf.raster <-
       for (i in 1:nlayers(out)) {
       
         out <- setValues(out,
-                         as.vector(v[, , i]),
+                         as.vector(t(v[, , i])),
                          layer = i)
   
       }
