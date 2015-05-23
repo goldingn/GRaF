@@ -97,7 +97,7 @@ predict.graf.raster <-
       if (inMemory) {
         
         res <- array(res, dim = c(tr$nrows[i], ncol(out), nlayers(out)))
-        rows <- tr$row[i]:(tr$row[i] + dim(res)[1] - 1)
+        rows <- tr$row[i]:(tr$row[i] + tr$nrows[i] - 1)
         v[rows, , ] <- res
         
       } else {
