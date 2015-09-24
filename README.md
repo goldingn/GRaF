@@ -1,3 +1,6 @@
+[![CRAN version](http://www.r-pkg.org/badges/version/GRaF](http://www.r-pkg.org/pkg/GRaF)
+[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/GRaF)](http://www.r-pkg.org/pkg/GRaF)
+
 # GRaF
 
 GRaF is an R package for fitting species distribution models using Gaussian random fields. There is a version of GRaF [on CRAN](http://cran.r-project.org/web/packages/GRaF/index.html), but this is the development version so 
