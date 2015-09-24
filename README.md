@@ -1,4 +1,4 @@
-[![CRAN version](http://www.r-pkg.org/badges/version/GRaF](http://www.r-pkg.org/pkg/GRaF)
+[![CRAN version](http://www.r-pkg.org/badges/version/GRaF)](http://www.r-pkg.org/pkg/GRaF)
 [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/GRaF)](http://www.r-pkg.org/pkg/GRaF)
 
 # GRaF
