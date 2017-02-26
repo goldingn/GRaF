@@ -1,8 +1,8 @@
 Package: GRaF
 Type: Package
 Title: Species distribution modelling using latent Gaussian processes (AKA Gaussian random fields)
-Version: 0.1-14
-Date: 2015-05-10
+Version: 0.1-15
+Date: 2017-02-27
 Author: Nick Golding
 Maintainer: Nick Golding <nick.golding.research@gmail.com>
 Description: Functions to fit, visualise and compare Gaussian process species distribution models.
