@@ -74,6 +74,7 @@ graf <-
     if (is.null(l)) {
       l <- rep(0.01, k)
       l[notfacs] <- apply(x[y == 1, notfacs, drop = FALSE], 2, sd) * 8
+      l[l == 0] <- 1
     }
     
     # calculate mean (on unscaled data and probability scale)
