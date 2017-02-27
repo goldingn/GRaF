@@ -1,1 +1,56 @@
-export(graf, plot.graf, print.graf, predict.graf, plot3d, DIC)
+export(graf,
+       plot.graf,
+       print.graf,
+       predict.graf,
+       plot3d,
+       DIC)
+
+S3method(plot, graf)
+
+S3method(print, graf)
+
+S3method(predict, graf)
+
+importFrom("raster",
+           "brick",
+           "raster",
+           "canProcessInMemory",
+           "rasterTmpFile",
+           "nlayers",
+           "blockSize",
+           "pbCreate",
+           "pbStep",
+           "pbClose",
+           "getValuesBlock",
+           "setValues",
+           "writeStart",
+           "writeValues",
+           "writeStop")
+
+importFrom("memoise",
+           "memoise",
+           "forget")
+
+importFrom("grDevices",
+           "rgb")
+
+importFrom("graphics",
+           "box",
+           "lines",
+           "persp",
+           "plot",
+           "polygon",
+           "rect",
+           "rug")
+
+importFrom("stats",
+           "dist",
+           "dnorm",
+           "integrate",
+           "na.omit",
+           "optim",
+           "optimise",
+           "pnorm",
+           "predict",
+           "qnorm",
+           "sd")

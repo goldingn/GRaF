@@ -75,6 +75,7 @@ Rasmussen & Williams(2006) Gaussian Processes for Machine Learning. \url{http://
 }
 \examples{
 # load Anguilla data from the dismo package
+library(dismo)
 data(Anguilla_train)
 
 # get the first 100 presence-absence records
@@ -86,7 +87,7 @@ x$DSDam <- factor(x$DSDam)
 # fit a presence-absence model to the data
 m1 <- graf(y, x)
 
-#print a brief summary of the model
+# print a brief summary of the model
 m1  # print(m1)
 
 # plot the (conditional) effect of each term
