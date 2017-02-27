@@ -3,7 +3,7 @@ predict.graf.raster <-
     
     # the following adapted from dismo:::predict
     
-    variables <- colnames(m$x)
+    variables <- colnames(object$x)
     
     if (is.null(CI)) {
       
@@ -72,7 +72,7 @@ predict.graf.raster <-
         # loop through and convert factors to factors
         for (col in ncol(newdata)) {
           
-          if (is.factor(m$obsx[, col])) {
+          if (is.factor(object$obsx[, col])) {
             
             newdata[, col] <- factor(newdata[, col])
             
@@ -81,7 +81,7 @@ predict.graf.raster <-
         }
         
         # predict to this batch of pixels
-        p <- predict.graf(m,
+        p <- predict.graf(object,
                           newdata = newdata,
                           type = type,
                           CI = CI,
